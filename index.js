@@ -1,16 +1,19 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { fetchAndParseFeed, generateMarkdown, saveMarkdown } = require('./process');
 const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-const { parseStringPromise } = require('xml2js');
-const sanitize = require('sanitize-filename');
-const chatGPT = require("./chatGPT");
-const urlreader = require("./getURL");
-const readabilitylib = require('@mozilla/readability');
-const Readability = readabilitylib.Readability;
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+
+//const path = require('path');
+//const axios = require('axios');
+//const { parseStringPromise } = require('xml2js');
+//const sanitize = require('sanitize-filename');
+//const chatGPT = require("./chatGPT");
+//const urlreader = require("./getURL");
+//const readabilitylib = require('@mozilla/readability');
+//const Readability = readabilitylib.Readability;
+//const jsdom = require("jsdom");
+//const { JSDOM } = jsdom;
+
 const chatGPT_Prompt = core.getInput('chatGPT_Prompt') || ` As a professional summarizer, create a concise and comprehensive summary of the provided text, be it an article, post, conversation, or passage, while adhering to these guidelines:
     1. Craft a summary that is detailed, thorough, in-depth, and complex, while maintaining clarity and conciseness.
     2. Incorporate main ideas and essential information, eliminating extraneous language and focusing on critical aspects.
@@ -45,6 +48,29 @@ async function run() {
 
     // Read the template file
     const template = fs.readFileSync(templateFile, 'utf8');
+
+    // Fetch and parse the RSS feed
+    const feedData = await fetchAndParseFeed(feedUrl);
+
+    const entries = feedData?.feed?.entry || feedData?.rss?.channel?.[0]?.item || [];
+    
+
+    entries.forEach((entry) => {
+      
+      const { output, date, title } = generateMarkdown(template, entry);
+      const filePath = saveMarkdown(outputDir, date, title, output);
+      //Add chatgpt here - maybe
+
+      console.log(`Markdown file '${filePath}' created.`);
+
+    });
+  } 
+  catch (error) {
+    core.setFailed(error.message);
+  }
+
+
+/**
 
     // Fetch the RSS feed
     const response = await axios.get(feedUrl);
@@ -153,9 +179,9 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
-}
+}**/
 
-
+/*
 function WriteArticle(article, filePath, replace ){
 
   const filefs = fs.readFileSync(filePath, 'utf8');
@@ -193,8 +219,8 @@ async function parseAll(link, filePath, replace) {//, file) {
     }
 }
 
-
-
+*/
+}
 
 
 run();
