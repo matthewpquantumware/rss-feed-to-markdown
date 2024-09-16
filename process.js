@@ -38,8 +38,9 @@ const generateMarkdown = (template, entry) => {
   if (thumbnail == ''){
     try{
       const dom = new JSDOM(content)
-      const thumbnail = dom.window.document.querySelector("img").src.toString ; 
-      console.log(`dom '${dom.window.document.querySelector("img").src.toString}' `);
+      const thumbnail = dom.window.document.querySelector("img").src ; 
+      console.log(`dom '${thumbnail}' `);
+      console.log(`dom '${dom.window.document.querySelector("img").src}' `);
     }catch{}
     
   }
