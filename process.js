@@ -29,6 +29,12 @@ const generateMarkdown = (template, entry) => {
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
+  const thumbnail = images; 
+  const datepub = date;
+  
+  
+
+
 
   const output = template
     .replaceAll('[ID]', id)
