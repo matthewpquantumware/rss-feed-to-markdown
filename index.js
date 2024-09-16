@@ -60,8 +60,10 @@ async function run() {
       const items = feedData.rss.channel?.[0].item || [];
     } catch {
       try{
-        const items = feedData.feed?.entry || [];
-      }  catch {}
+        const items = feedData.feed?.[0].entry || [];
+      }  catch {
+        const items = feedData.feed.entry || [];
+      }
     }
     console.log(`Feed items found.`, items.length);
     
