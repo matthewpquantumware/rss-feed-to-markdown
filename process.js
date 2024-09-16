@@ -33,9 +33,9 @@ const generateMarkdown = (template, entry) => {
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
-  thumbnail ='';
+  //thumbnail ='';
   const dom = new JSDOM(content)
-
+/*
   try{
     
     thumbnail = dom.window.document.querySelector("img").src ; 
@@ -46,8 +46,8 @@ const generateMarkdown = (template, entry) => {
   if (thumbnail==''){
     thumbnail = images;
   }
-  
-  thumbnail = images ?? dom.window.document.querySelector("img").src ?? '';
+  */
+  thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
   
   
 
