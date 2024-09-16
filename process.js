@@ -17,6 +17,7 @@ async function fetchAndParseFeed(feedUrl) {
 const generateMarkdown = (template, entry) => {
   const id = entry['yt:videoId']?.[0] || entry['id']?.[0] || entry.guid?.[0]?.['_'] || entry.guid?.[0] || '';
   const date = entry.published?.[0] || entry.pubDate?.[0] || entry.updated?.[0] || '';
+  const pubdate = entry.published?.[0] || entry.pubDate?.[0] || '';
   const link = entry.link?.[0]?.$?.href || entry.link?.[0] || '';
   const title = entry.title?.[0]?.replace(/[^\w\s-]/g, '') || '';
   const content = entry.description?.[0] || entry['media:group']?.[0]?.['media:description']?.[0] || entry.content?.[0]?.['_'] || '';
@@ -30,7 +31,7 @@ const generateMarkdown = (template, entry) => {
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const thumbnail = images; 
-  const datepub = date;
+
   
   
 
@@ -50,7 +51,9 @@ const generateMarkdown = (template, entry) => {
     .replaceAll('[IMAGES]', images.join(','))
     .replaceAll('[CATEGORIES]', categories.join(','))
     .replaceAll('[VIEWS]', views)
-    .replaceAll('[RATING]', rating);
+    .replaceAll('[RATING]', rating)
+    .replaceAll('[ENCLOSURE]', thumbnail)
+    .replaceAll('[PUBDATE]', pubdate);
 
   return { output, date, title };
 }
