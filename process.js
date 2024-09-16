@@ -33,18 +33,17 @@ const generateMarkdown = (template, entry) => {
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
-  const thumbnail= images;
+  
 
-  if (thumbnail == ''){
-    try{
-      const dom = new JSDOM(content)
-      thumbnail = dom.window.document.querySelector("img").src ; 
-      console.log(`dom '${thumbnail}' `);
-      console.log(`dom '${dom.window.document.querySelector("img").src}' `);
-    }catch{}
-    
+  try{
+    const dom = new JSDOM(content)
+    const thumbnail = dom.window.document.querySelector("img").src ; 
+    console.log(`dom '${thumbnail}' `);
+  }catch{
+    const thumbnail= images;
   }
-
+    
+  
   
   
 
