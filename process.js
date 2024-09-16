@@ -46,6 +46,7 @@ const generateMarkdown = (template, entry) => {
     thumbnail = images;
   }
   
+  thumbnail = images ?? dom.window.document.querySelector("img").src ?? '';
   
   
 
