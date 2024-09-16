@@ -28,6 +28,7 @@ async function run() {
     const templateFile = core.getInput('template_file');
     const outputDir = core.getInput('output_dir');
     const summerize = core.getInput('summerize') || false;
+    const overwrite = core.getInput('overwrite') || false;
     
     article = ''; 
 
@@ -111,14 +112,29 @@ async function run() {
       const fileName = `${slug}.md`;
       const filePath = path.join(outputDir, fileName);
 
-      fs.writeFileSync(filePath, markdown);
+      fs.access(path, fs.F_OK, (err) => {
+        if (err) {
+          console.error(err)
+          fs.writeFileSync(filePath, markdown);
+          return
+        }
+        //file exists
+        if (overwrite){
+          fs.writeFileSync(filePath, markdown);
+          }
+       })
+
+
+      //fs.writeFileSync(filePath, markdown);
 
       console.log(`Markdown file '${filePath}' created.`);
 
       //if (link == "https://thehackernews.com/2024/04/indian-government-rescues-250-citizens.html") {
       //  console.log("https://thehackernews.com/2024/04/indian-government-rescues-250-citizens.html");
       //  console.log(link);
+      if (summerize){
         parseAll(link, filePath, '[ARTICLE]');
+      }
       //}
 
 
