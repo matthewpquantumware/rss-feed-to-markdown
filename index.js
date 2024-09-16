@@ -56,20 +56,22 @@ async function run() {
     //const entries = feedData?.feed?.entry || [];
     const rss = feedData?.rss || [];
     //const channel = feedData?.rss?.channel || [];
-    try{
-      const items = feedData.rss.channel?.[0].item || [];
-    } catch {
-      try{
-        const items = feedData.feed?.entry || [];
-      }  catch {
-        const items = feedData.entry || [];
-      }
-    }
-    feedData
+    //try{
+    //  const items = feedData.rss.channel?.[0].item || [];
+    //} catch {
+    //  try{
+    //    const items = feedData.feed?.entry || [];
+    // }  catch {
+    //    const items = feedData.entry || [];
+    //  }
+    //}
+    
+    const entries = feedData?.feed?.entry || feedData?.rss?.channel?.[0]?.item || [];
+
     console.log(`Feed items found.`, items.length);
     
     // Process the feed entries and generate Markdown files
-    items.forEach((item) => {
+    entries.forEach((item) => {
       const title = "\""+item.title?.[0]?.replace(/[^\w\s-]/g, '') +"\"" || '';
       //const description = entry['media:group']?.[0]?.['media:description']?.[0] || '';
       const description = "\""+(item.description?.[0]?.replace(/["':]/g, '')).replace(/&nbsp;/g, " ")+"...\"" || '';
