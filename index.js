@@ -60,11 +60,12 @@ async function run() {
       const items = feedData.rss.channel?.[0].item || [];
     } catch {
       try{
-        const items = feedData.feed?.[0].entry || [];
+        const items = feedData.feed?.entry || [];
       }  catch {
-        const items = feedData.feed.entry || [];
+        const items = feedData.entry || [];
       }
     }
+    feedData
     console.log(`Feed items found.`, items.length);
     
     // Process the feed entries and generate Markdown files
