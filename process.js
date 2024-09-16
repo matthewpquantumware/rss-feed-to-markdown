@@ -33,15 +33,14 @@ const generateMarkdown = (template, entry) => {
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
-  //const thumbnail = images; 
+  const thumbnail = images || dom.window.document.querySelector("img").src || ''; 
   
   //const dom = new JSDOM(content)
   try{
   const thumbnail = dom.window.document.querySelector("img");
   }catch{}
-
   console.log(`dom '${dom.window.document.querySelector("img").src}' `);
-  console.log(`dom '${dom.window.document.querySelector("img").toString}' `);
+  
 
   
   
