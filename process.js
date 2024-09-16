@@ -28,26 +28,12 @@ const generateMarkdown = (template, entry) => {
   const author = entry.author?.[0]?.name?.[0] || entry['author']?.[0]?.name?.[0] || entry['dc:creator']?.[0] || 'Unknown Author';
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
-  
   const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) ||  [];
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
-  //thumbnail ='';
   const dom = new JSDOM(content)
-/*
-  try{
-    
-    thumbnail = dom.window.document.querySelector("img").src ; 
-    console.log(`dom '${thumbnail}' `);
-  }catch{
-    
-  }
-  if (thumbnail==''){
-    thumbnail = images;
-  }
-  */
-  thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
+  const thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
   
   
 
