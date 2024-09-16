@@ -34,9 +34,10 @@ const generateMarkdown = (template, entry) => {
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   thumbnail ='';
+  const dom = new JSDOM(content)
 
   try{
-    const dom = new JSDOM(content)
+    
     thumbnail = dom.window.document.querySelector("img").src ; 
     console.log(`dom '${thumbnail}' `);
   }catch{
