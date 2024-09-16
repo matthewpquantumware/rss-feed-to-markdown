@@ -29,12 +29,14 @@ const generateMarkdown = (template, entry) => {
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
   const dom = new JSDOM(content)
-  const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src.toString ||  [];
+  const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelectorAll("img").src || [];
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const thumbnail = images; 
   
+  //const dom = new JSDOM(content)
+  //dom.window.document.querySelectorAll("img").src ||
 
   
 
