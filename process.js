@@ -51,7 +51,6 @@ const generateMarkdown = (template, entry) => {
     .replaceAll('[VIDEO]', video)
     .replaceAll('[IMAGE]', image)
     .replaceAll('[IMAGES]', images.join(','))
-    //.replaceAll('[IMAGES]', images)
     .replaceAll('[CATEGORIES]', categories.join(','))
     .replaceAll('[VIEWS]', views)
     .replaceAll('[RATING]', rating)
