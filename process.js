@@ -55,7 +55,7 @@ const generateMarkdown = (template, entry) => {
   return { output, date, title };
 }
 
-function saveMarkdown(outputDir, date, title, markdown) {
+function saveMarkdown(outputDir, date, title, markdown, overwrite) {
   const formattedDate = date ? new Date(date).toISOString().split('T')[0] : '';
   const slug = sanitize(`${formattedDate}-${title.toLowerCase().replace(/\s+/g, '-')}`).substring(0, 50);
   const fileName = `${slug}.md`;
@@ -63,7 +63,7 @@ function saveMarkdown(outputDir, date, title, markdown) {
 
   //fs.writeFileSync(filePath, markdown);
   fs.access(filePath, fs.F_OK, (err) => {
-    if (err || overwite) {
+    if (err || overwrite) {
       //File does not Exist or Overwrite File
       fs.writeFileSync(filePath, markdown);
       return

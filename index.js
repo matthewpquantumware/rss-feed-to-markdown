@@ -58,7 +58,7 @@ async function run() {
     entries.forEach((entry) => {
       
       const { output, date, title } = generateMarkdown(template, entry);
-      const filePath = saveMarkdown(outputDir, date, title, output);
+      const filePath = saveMarkdown(outputDir, date, title, output, overwrite);
       //Add chatgpt here - maybe
 
       console.log(`Markdown file '${filePath}' created.`);
