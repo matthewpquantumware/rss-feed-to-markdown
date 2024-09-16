@@ -5,6 +5,8 @@ const { parseStringPromise } = require('xml2js');
 const sanitize = require('sanitize-filename');
 const TurndownService = require('turndown');
 const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 // Fetch the RSS feed
 async function fetchAndParseFeed(feedUrl) {
@@ -26,13 +28,15 @@ const generateMarkdown = (template, entry) => {
   const author = entry.author?.[0]?.name?.[0] || entry['author']?.[0]?.name?.[0] || entry['dc:creator']?.[0] || 'Unknown Author';
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
-  const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) ||  entry.content?.[0]?.['figure']?.[0]?.['img']?.[0]?.src || [];
+  const dom = new JSDOM(content)
+  const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src ||  [];
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const thumbnail = images; 
+  
 
-
+  
 
   
   
