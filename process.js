@@ -28,19 +28,19 @@ const generateMarkdown = (template, entry) => {
   const author = entry.author?.[0]?.name?.[0] || entry['author']?.[0]?.name?.[0] || entry['dc:creator']?.[0] || 'Unknown Author';
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
-  const dom = new JSDOM(content)
+  
   const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) ||  [];
   const categories = entry.category || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
-  const thumbnail = images || dom.window.document.querySelector("img").src || ''; 
   
-  //const dom = new JSDOM(content)
-  try{
-  const thumbnail = dom.window.document.querySelector("img");
-  }catch{}
-  console.log(`dom '${dom.window.document.querySelector("img").src}' `);
-  
+  if (images == ''){
+    try{
+      const dom = new JSDOM(content)
+      const thumbnail = dom.window.document.querySelector("img").src || ''; 
+    }catch{}
+    console.log(`dom '${dom.window.document.querySelector("img").src}' `);
+  }
 
   
   
