@@ -43,7 +43,7 @@ const generateMarkdown = (template, entry) => {
   }catch{  }
 
   //for p.
-  console.log(`${dom.window.document.toISOString}`);
+  console.log(`${dom.window.document}`);
   //dom.window.document.remove(p);
 
   //p.remove(p);
