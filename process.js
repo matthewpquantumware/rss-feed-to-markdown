@@ -39,9 +39,9 @@ const generateMarkdown = (template, entry) => {
   //dom.window.document.querySelector("figure").innerHTML='';
 
   
-  const p = dom.window.document.querySelector("figure");
+  const p = dom.window.document.querySelector("figure").replaceChildren("");
   console.log(`${p}`);
-  dom.window.document.remove(p);
+  //dom.window.document.remove(p);
 
   //p.remove(p);
   const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(p) || '';
