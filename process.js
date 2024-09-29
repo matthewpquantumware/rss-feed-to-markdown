@@ -55,7 +55,9 @@ const generateMarkdown = (template, entry) => {
     .replaceAll('[VIEWS]', views)
     .replaceAll('[RATING]', rating)
     .replaceAll('[ENCLOSURE]', thumbnail)
-    .replaceAll('[PUBDATE]', pubdate);
+    .replaceAll('[PUBDATE]', pubdate)
+    .replaceAll('[TEXTMD]', textmd);
+  
 
   return { output, date, title };
 }
