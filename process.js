@@ -47,7 +47,7 @@ const generateMarkdown = (template, entry) => {
   //dom.window.document.remove(p);
 
   //p.remove(p);
-  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom) || '';
+  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom.window.document) || '';
   
 
 
