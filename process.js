@@ -41,8 +41,9 @@ const generateMarkdown = (template, entry) => {
   try{
   dom.window.document.querySelector("figure").remove();
   }catch{  }
+
   //for p.
-  console.log(`${dom.toISOString}`);
+  console.log(`${dom.window.document.toISOString}`);
   //dom.window.document.remove(p);
 
   //p.remove(p);
