@@ -41,7 +41,7 @@ const generateMarkdown = (template, entry) => {
   
   const p = dom.window.document.querySelector("figure");
   console.log(`${p}`);
-  dom.window.document.removeChild(p);
+  dom.window.document.remove(p);
 
   //p.remove(p);
   const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(p) || '';
