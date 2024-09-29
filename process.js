@@ -38,13 +38,15 @@ const generateMarkdown = (template, entry) => {
   //const p.getElementById("figure")
   //dom.window.document.querySelector("figure").innerHTML='';
 
-  
-  const p = dom.window.document.querySelector("figure").replaceChildren("");
-  console.log(`${p}`);
+  try{
+  dom.window.document.querySelector("figure").remove();
+  }catch{  }
+  //for p.
+  console.log(`${dom.toISOString}`);
   //dom.window.document.remove(p);
 
   //p.remove(p);
-  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(p) || '';
+  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom) || '';
   
 
 
