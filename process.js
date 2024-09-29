@@ -34,7 +34,7 @@ const generateMarkdown = (template, entry) => {
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const dom = new JSDOM(content)
   const thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
-  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom.window.document.querySelector("p"));
+  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom.window.document.querySelector("p").innerhtml);
   
 
 
