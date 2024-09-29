@@ -34,19 +34,7 @@ const generateMarkdown = (template, entry) => {
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const dom = new JSDOM(content);
   const thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
-  //const p=dom.window.document || '';
-  //const p.getElementById("figure")
-  //dom.window.document.querySelector("figure").innerHTML='';
-
-  try{
-  dom.window.document.querySelector("figure").remove();
-  }catch{  }
-
-  //for p.
-  console.log(`${dom.window.document}`);
-  //dom.window.document.remove(p);
-
-  //p.remove(p);
+  try{dom.window.document.querySelector("figure").remove();}catch{  }
   const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom.window.document) || '';
   
 
