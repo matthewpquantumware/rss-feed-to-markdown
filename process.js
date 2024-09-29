@@ -36,7 +36,7 @@ const generateMarkdown = (template, entry) => {
   const thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
   //const p=dom.window.document || '';
   //const p.getElementById("figure")
-  dom.window.document.querySelector("figure").outerHTML='';
+  dom.window.document.querySelector("figure").innerHTML='';
   //const p = dom.window.document.querySelector("figure");
   //dom.window.document.removeChild(p);
   const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom) || '';
