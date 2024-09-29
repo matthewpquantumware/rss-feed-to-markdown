@@ -37,8 +37,8 @@ const generateMarkdown = (template, entry) => {
   //const p=dom.window.document || '';
   //const p.getElementById("figure")
   const p = dom.window.document.querySelector("figure");
-  p.removeChild(p);
-  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(p) || '';
+  dom.window.document.removeChild(p);
+  const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom) || '';
   
 
 
