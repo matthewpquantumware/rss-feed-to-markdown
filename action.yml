@@ -15,7 +15,7 @@ inputs:
     description: "Summerize the Article with ChatGPT"
     required: false
   category:
-    description: "categories - comma sep"
+    description: "categories Multiple values supported"
     required: false
   overwrite:
     description: "overwrite existing posts"

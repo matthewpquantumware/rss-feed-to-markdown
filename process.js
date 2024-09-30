@@ -29,9 +29,7 @@ const generateMarkdown = (template, entry, category) => {
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
   const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) ||  [];
-  var arr = [];
-  arr.concat(category);
-  const categories = arr.concat(entry.category) || [];
+  const categories = category.concat(entry.category) || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const dom = new JSDOM(content);

@@ -32,7 +32,10 @@ async function run() {
     const outputDir = core.getInput('output_dir');
     const summerize = core.getInput('summerize') || false;
     const overwrite = core.getInput('overwrite') || false;
-    const category = core.getInput('category').split(",") || [];
+    const category = core.getInput('category')
+      .split(/[\r\n]/)
+      .map(input => input.trim())
+      .filter(input => input !== '') || [];
     
     article = ''; 
 
