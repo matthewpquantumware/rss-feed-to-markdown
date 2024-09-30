@@ -16,7 +16,7 @@ async function fetchAndParseFeed(feedUrl) {
 }
 
 // Process the feed entries and generate Markdown files
-const generateMarkdown = (template, entry) => {
+const generateMarkdown = (template, entry, category) => {
   const id = entry['yt:videoId']?.[0] || entry['id']?.[0] || entry.guid?.[0]?.['_'] || entry.guid?.[0] || '';
   const date = entry.published?.[0] || entry.pubDate?.[0] || entry.updated?.[0] || '';
   const pubdate = entry.published?.[0] || entry.pubDate?.[0] || '';
@@ -29,14 +29,16 @@ const generateMarkdown = (template, entry) => {
   const video = entry['media:group']?.[0]?.['media:content']?.[0]?.$?.url || '';
   const image = entry['media:group']?.[0]?.['media:thumbnail']?.[0]?.$.url || entry['media:thumbnail']?.[0]?.$.url || '';
   const images = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) ||  [];
-  const categories = entry.category || [];
+  var arr = [];
+  arr.concat(arr.push(category))
+  const categories = arr || [];
   const views = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:statistics']?.[0]?.$.views || '';
   const rating = entry['media:group']?.[0]?.['media:community']?.[0]?.['media:starRating']?.[0]?.$.average || '';
   const dom = new JSDOM(content);
   const thumbnail = (entry['enclosure'] || entry['media:content'])?.filter(e => imageTypes.includes(e.$['type']))?.map(e => e.$.url) || dom.window.document.querySelector("img").src || '';
   try{dom.window.document.querySelector("figure").remove();}catch{  }
   const textmd =new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(dom.window.document) || '';
-  
+    
 
 
 
