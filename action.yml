@@ -14,6 +14,12 @@ inputs:
   summerize:
     description: "Summerize the Article with ChatGPT"
     required: false
+  category:
+    description: "categories - comma sep"
+    required: false
+  overwrite:
+    description: "overwrite existing posts"
+    required: false
   OPENAI_apiKey:
     description: "The api key for openai"
     required: false
