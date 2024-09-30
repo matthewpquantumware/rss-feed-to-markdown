@@ -32,6 +32,7 @@ async function run() {
     const outputDir = core.getInput('output_dir');
     const summerize = core.getInput('summerize') || false;
     const overwrite = core.getInput('overwrite') || false;
+    const Category = core.getInput('category') || '';
     
     article = ''; 
 
@@ -57,7 +58,7 @@ async function run() {
 
     entries.forEach((entry) => {
       
-      const { output, date, title } = generateMarkdown(template, entry);
+      const { output, date, title } = generateMarkdown(template, entry, category);
       const filePath = saveMarkdown(outputDir, date, title, output, overwrite);
       //Add chatgpt here - maybe
 
