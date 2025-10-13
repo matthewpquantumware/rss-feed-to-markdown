@@ -55,6 +55,7 @@ function extractText(v, depth = 0) {
 
 // Normalize whitespace
 const norm = (v) => extractText(v).replace(/\s+/g, ' ').trim();
+const sanitize = (s) => s.replace(/[^\p{L}\p{N}\s-]/gu, ''); // Unicode-safe
 
 // Fetch the RSS feed
 async function fetchAndParseFeed(feedUrl) {
@@ -70,7 +71,8 @@ const generateMarkdown = (template, entry, category) => {
   const pubdate = entry.published?.[0] || entry.pubDate?.[0] || '';
   const link = entry.link?.[0]?.$?.href || entry.link?.[0] || '';
   //const title = entry.title?.[0]?.replace(/[^\w\s-]/g, '') || '';
-  const title = String(Array.isArray(entry?.title) ? entry.title[0] : entry?.title ?? '').replace(/[^\p{L}\p{N}\s-]/gu, '');
+  const title = sanitize(norm(textOf(entry.title)));
+  //const title = String(Array.isArray(entry?.title) ? entry.title[0] : entry?.title ?? '').replace(/[^\p{L}\p{N}\s-]/gu, '');
   const content = entry.description?.[0] || entry['media:group']?.[0]?.['media:description']?.[0] || entry.content?.[0]?.['_'] || '';
   const markdown = new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(content);
   const description = entry.summary?.[0] || content.replace(/(["':^]+)/gi, "").split(" ").splice(0, 50).join(" ") || '';
