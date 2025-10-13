@@ -8,6 +8,23 @@ const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+
+// Coerce anything → string
+const toStr = (v) => {
+  if (v == null) return '';
+  if (typeof v === 'string') return v;
+  if (Array.isArray(v)) return v.map(toStr).join(','); // for IMAGES/CATEGORIES etc.
+  if (typeof v === 'object') {
+    // common parser shapes: {value}, {text}, {_}
+    const maybe = v.value ?? v.text ?? v._;
+    if (typeof maybe === 'string') return maybe;
+  }
+  return String(v);
+};
+
+// Normalize whitespace on text fields
+const norm = (v) => toStr(v).replace(/\s+/g, ' ').trim();
+
 // Fetch the RSS feed
 async function fetchAndParseFeed(feedUrl) {
   const response = await axios.get(feedUrl);
@@ -41,24 +58,25 @@ const generateMarkdown = (template, entry, category) => {
 
 
 
-  const output = template
-    .replaceAll('[ID]', id)
-    .replaceAll('[DATE]', date)
-    .replaceAll('[LINK]', link)
-    .replaceAll('[TITLE]', title.replace(/\s+/g, ' ').trim())
-    .replaceAll('[DESCRIPTION]', description.replace(/\s+/g, ' ').trim())
-    .replaceAll('[CONTENT]', content)
-    .replaceAll('[MARKDOWN]', markdown)
-    .replaceAll('[AUTHOR]', author)
-    .replaceAll('[VIDEO]', video)
-    .replaceAll('[IMAGE]', image)
-    .replaceAll('[IMAGES]', images.join(','))
-    .replaceAll('[CATEGORIES]', categories.join(','))
-    .replaceAll('[VIEWS]', views)
-    .replaceAll('[RATING]', rating)
-    .replaceAll('[ENCLOSURE]', thumbnail)
-    .replaceAll('[PUBDATE]', pubdate)
-    .replaceAll('[TEXTMD]', textmd);
+// Build output with guaranteed strings
+const output = toStr(template)
+  .replaceAll('[ID]', toStr(id))
+  .replaceAll('[DATE]', toStr(date))
+  .replaceAll('[LINK]', toStr(link))
+  .replaceAll('[TITLE]', norm(title))
+  .replaceAll('[DESCRIPTION]', norm(description))   // <-- fixed
+  .replaceAll('[CONTENT]', toStr(content))
+  .replaceAll('[MARKDOWN]', toStr(markdown))
+  .replaceAll('[AUTHOR]', toStr(author))
+  .replaceAll('[VIDEO]', toStr(video))
+  .replaceAll('[IMAGE]', toStr(image))
+  .replaceAll('[IMAGES]', Array.isArray(images) ? images.map(toStr).join(',') : toStr(images))
+  .replaceAll('[CATEGORIES]', Array.isArray(categories) ? categories.map(toStr).join(',') : toStr(categories))
+  .replaceAll('[VIEWS]', toStr(views))
+  .replaceAll('[RATING]', toStr(rating))
+  .replaceAll('[ENCLOSURE]', toStr(thumbnail))
+  .replaceAll('[PUBDATE]', toStr(pubdate))
+  .replaceAll('[TEXTMD]', toStr(textmd));
   
 
   return { output, date, title };
