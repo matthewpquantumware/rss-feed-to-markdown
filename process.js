@@ -56,6 +56,15 @@ function extractText(v, depth = 0) {
 // Normalize whitespace
 const norm = (v) => extractText(v).replace(/\s+/g, ' ').trim();
 const sanitizeStr = (s) => s.replace(/[^\p{L}\p{N}\s-]/gu, ''); // Unicode-safe
+ const textOf = (v) => {
+    if (v == null) return '';
+    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') return String(v);
+    if (Array.isArray(v)) return textOf(v[0]);
+    if (typeof v === 'object') {
+      return textOf(v._) || textOf(v.value) || textOf(v.text) || textOf(v['#text']) || '';
+    }
+    return '';
+  };
 
 // Fetch the RSS feed
 async function fetchAndParseFeed(feedUrl) {
