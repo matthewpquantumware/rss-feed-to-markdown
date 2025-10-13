@@ -89,25 +89,31 @@ const generateMarkdown = (template, entry, category) => {
 
 
 
-// Build output with guaranteed strings
-const output = toStr(template)
-  .replaceAll('[ID]', toStr(id))
-  .replaceAll('[DATE]', toStr(date))
-  .replaceAll('[LINK]', toStr(link))
-  .replaceAll('[TITLE]', norm(title))
-  .replaceAll('[DESCRIPTION]', norm(description))   // <-- fixed
-  .replaceAll('[CONTENT]', toStr(content))
-  .replaceAll('[MARKDOWN]', toStr(markdown))
-  .replaceAll('[AUTHOR]', toStr(author))
-  .replaceAll('[VIDEO]', toStr(video))
-  .replaceAll('[IMAGE]', toStr(image))
-  .replaceAll('[IMAGES]', Array.isArray(images) ? images.map(toStr).join(',') : toStr(images))
-  .replaceAll('[CATEGORIES]', Array.isArray(categories) ? categories.map(toStr).join(',') : toStr(categories))
-  .replaceAll('[VIEWS]', toStr(views))
-  .replaceAll('[RATING]', toStr(rating))
-  .replaceAll('[ENCLOSURE]', toStr(thumbnail))
-  .replaceAll('[PUBDATE]', toStr(pubdate))
-  .replaceAll('[TEXTMD]', toStr(textmd));
+// Safer token replacement loop
+let output = String(template);
+const fields = {
+  '[ID]': id,
+  '[DATE]': date,
+  '[LINK]': link,
+  '[TITLE]': norm(title),               // <-- no more [object Object]
+  '[DESCRIPTION]': norm(description),
+  '[CONTENT]': extractText(content),
+  '[MARKDOWN]': extractText(markdown),
+  '[AUTHOR]': extractText(author),
+  '[VIDEO]': extractText(video),
+  '[IMAGE]': extractText(image),
+  '[IMAGES]': Array.isArray(images) ? images.map(extractText).filter(Boolean).join(',') : extractText(images),
+  '[CATEGORIES]': Array.isArray(categories) ? categories.map(extractText).filter(Boolean).join(',') : extractText(categories),
+  '[VIEWS]': extractText(views),
+  '[RATING]': extractText(rating),
+  '[ENCLOSURE]': extractText(thumbnail),
+  '[PUBDATE]': extractText(pubdate),
+  '[TEXTMD]': extractText(textmd),
+};
+
+for (const [token, value] of Object.entries(fields)) {
+  output = output.replaceAll(token, value ?? '');
+}
   
 
   return { output, date, title };
