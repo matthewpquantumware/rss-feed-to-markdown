@@ -9,21 +9,52 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 
-// Coerce anything → string
-const toStr = (v) => {
-  if (v == null) return '';
-  if (typeof v === 'string') return v;
-  if (Array.isArray(v)) return v.map(toStr).join(','); // for IMAGES/CATEGORIES etc.
-  if (typeof v === 'object') {
-    // common parser shapes: {value}, {text}, {_}
-    const maybe = v.value ?? v.text ?? v._;
-    if (typeof maybe === 'string') return maybe;
-  }
-  return String(v);
-};
+// Pull human text out of strings/arrays/common parser objects
+function extractText(v, depth = 0) {
+  if (v == null || depth > 4) return '';
 
-// Normalize whitespace on text fields
-const norm = (v) => toStr(v).replace(/\s+/g, ' ').trim();
+  // Already a string/number/bool
+  if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
+    return String(v);
+  }
+
+  // Arrays: take first meaningful piece (or join if you prefer)
+  if (Array.isArray(v)) {
+    // Try first non-empty after extraction
+    for (const item of v) {
+      const s = extractText(item, depth + 1).trim();
+      if (s) return s;
+    }
+    return '';
+  }
+
+  // Objects: common feed/parser shapes
+  if (typeof v === 'object') {
+    // Try well-known keys in order
+    const candidates = [
+      v.value, v.text, v._, v.title, v.content, v['#text']
+    ];
+
+    for (const c of candidates) {
+      const s = extractText(c, depth + 1).trim();
+      if (s) return s;
+    }
+
+    // Last resort: look for the first primitive-ish field
+    for (const k of Object.keys(v)) {
+      const s = extractText(v[k], depth + 1).trim();
+      if (s) return s;
+    }
+    return '';
+  }
+
+  // Fallback
+  return '';
+}
+
+
+// Normalize whitespace
+const norm = (v) => extractText(v).replace(/\s+/g, ' ').trim();
 
 // Fetch the RSS feed
 async function fetchAndParseFeed(feedUrl) {
