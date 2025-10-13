@@ -21,7 +21,8 @@ const generateMarkdown = (template, entry, category) => {
   const date = entry.published?.[0] || entry.pubDate?.[0] || entry.updated?.[0] || '';
   const pubdate = entry.published?.[0] || entry.pubDate?.[0] || '';
   const link = entry.link?.[0]?.$?.href || entry.link?.[0] || '';
-  const title = entry.title?.[0]?.replace(/[^\w\s-]/g, '') || '';
+  //const title = entry.title?.[0]?.replace(/[^\w\s-]/g, '') || '';
+  const title = String(Array.isArray(entry?.title) ? entry.title[0] : entry?.title ?? '').replace(/[^\p{L}\p{N}\s-]/gu, '');
   const content = entry.description?.[0] || entry['media:group']?.[0]?.['media:description']?.[0] || entry.content?.[0]?.['_'] || '';
   const markdown = new TurndownService({codeBlockStyle: 'fenced', fenced: '```', bulletListMarker: '-'}).turndown(content);
   const description = entry.summary?.[0] || content.replace(/(["':^]+)/gi, "").split(" ").splice(0, 50).join(" ") || '';
